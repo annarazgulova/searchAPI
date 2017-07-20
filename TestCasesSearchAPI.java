@@ -23,14 +23,14 @@ public class TestCasesSearchAPI {
  			browsers compatibility 				
  			platform compatibility				
  			stress: simulate big amount of requests per sec (Jmetter) 
-   */				
+   */
+	
+	
  	
  	@Test(dataProvider = "testItunesAPI", groups={"apiExercise"})
  	public void testItunesAPI(String term, String country, String media, String limit ) {
- 		SearchAPI.doHTTPrequest(term, country, media, limit);
-  		Assert.assertTrue(SearchAPI.doHTTPrequest(term, country, media, limit));		 
+ 		Assert.assertTrue(SearchApiFlows.verifyResponceCode(term, country, media, limit, 200));		 
  	}
-
  	@DataProvider(name = "testItunesAPI")
  	// just example here. I would implement buildTestMatrix class which build data objects according test plan dynamically.
  	public static Object[][] itunesApiParams() {
@@ -38,6 +38,19 @@ public class TestCasesSearchAPI {
  				{ "anna", "", "", ""},
  				{ "anna", "US", "movies", "20" },
  				{ "anna", "Russia", "movies", "0"},
+ 				 };
+ 	}
+ 	
+ 	@Test(dataProvider = "testItunesAPIcontent", groups={"apiExercise"})
+ 	public void testItunesAPIcontent(String term, String country, String media, String limit, String expectedPattern) {
+ 		Assert.assertTrue(SearchApiFlows.verifyResponceContent(term, country, media, limit,  expectedPattern));		 
+ 	}
+ 	@DataProvider(name = "testItunesAPIcontent")
+ 	public static Object[][] itunesApiParams1() {
+ 		return new Object[][] {
+ 				{ "anna", "", "", "", "anna"},
+ 				{ "anna", "US", "movies", "20", "Anna" },
+ 				{ "anna", "Russia", "movies", "0", "Russia"},
  				 };
  	}
 }
